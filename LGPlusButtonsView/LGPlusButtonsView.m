@@ -316,9 +316,16 @@ typedef NS_ENUM(NSUInteger, LGPlusButtonDescriptionsPosition)
     for (LGPlusButton *button in _buttonsArray)
     {
         CGPoint newPoint = [self convertPoint:point toView:button];
-
+        
         view = [button hitTest:newPoint withEvent:event];
-        if (view) break;
+        
+        if (view) {
+            UIView *superview = button.superview.superview;
+            if (superview.alpha == 0) {
+                return nil;
+            }
+            break;
+        }
     }
 
     if (!view && _coverColor && !_coverView.isHidden)
